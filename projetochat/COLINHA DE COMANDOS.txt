@@ -1,0 +1,16 @@
+comandos:
+
+Cria um container a partir de uma imagem:
+docker run -it servidor
+docker run -it cliente
+
+Construi uma imagem a partir de um Dockerfile com nome de preferencia:
+docker build -t servidor -f DockerfileServidor .
+docker build -t cliente -f DockerfileCliente .
+
+Para abrir o terminal de um container:
+docker exec -it servidor /bin/bash
+
+Para rodar a aplicação presente no container:
+java -cp src chat.Cliente cliente1
+

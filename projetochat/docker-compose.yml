@@ -1,0 +1,41 @@
+version: '3.8' # Define a versão do Docker Compose
+
+services: # Define os serviços a serem executados
+  servidor:
+    build:
+      context: . # Define o diretório de contexto para a construção da imagem
+      dockerfile: DockerfileServidor # Especifica o Dockerfile a ser usado
+    ports:
+      - "8080:8080" # Mapeia a porta 8080 do host para a porta 8080 do contêiner
+    networks:
+      - chatnet # Conecta o serviço à rede chatnet
+
+  cliente1:
+    build:
+      context: . # Define o diretório de contexto para a construção da imagem
+      dockerfile: DockerfileCliente # Especifica o Dockerfile a ser usado
+    depends_on:
+      - servidor # Garante que o servidor seja iniciado antes do cliente
+    networks:
+      - chatnet # Conecta o serviço à rede chatnet
+    environment:
+      SERVER_ADDRESS: servidor # Define a variável de ambiente SERVER_ADDRESS com o valor 'servidor'
+      SERVER_PORT: "8080" # Define a variável de ambiente SERVER_PORT com o valor '8080'
+    command: ["java", "-cp", "src", "chat.Cliente", "cliente1"] # Especifica o comando a ser executado no contêiner
+
+  cliente2:
+    build:
+      context: . # Define o diretório de contexto para a construção da imagem
+      dockerfile: DockerfileCliente # Especifica o Dockerfile a ser usado
+    depends_on:
+      - servidor # Garante que o servidor seja iniciado antes do cliente
+    networks:
+      - chatnet # Conecta o serviço à rede chatnet
+    environment:
+      SERVER_ADDRESS: servidor # Define a variável de ambiente SERVER_ADDRESS com o valor 'servidor'
+      SERVER_PORT: "8080" # Define a variável de ambiente SERVER_PORT com o valor '8080'
+    command: ["java", "-cp", "src", "chat.Cliente", "cliente2"] # Especifica o comando a ser executado no contêiner
+
+networks:
+  chatnet: # Define a rede chatnet
+    driver: bridge # Define o driver da rede como bridge

@@ -1,0 +1,9 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY src/chat/Cliente.java src/chat/
+
+RUN javac src/chat/Cliente.java
+
+CMD ["java", "-cp", "src", "chat.Cliente"]
